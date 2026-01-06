@@ -130,8 +130,8 @@ refillio/
 - **View Logs:** `docker compose logs -f [service_name]`
 
 ### Access Points
-- **Backend API:** `http://localhost:8081` (Mapping to container port 8080)
-- **Mobile Web:** `http://localhost:3000`
+- **Refillio App (Gateway):** `http://localhost:3000` (Serves UI + Proxies `/api` to Backend)
+- **Backend API (Direct):** `http://localhost:8081` (For debugging only)
 - **Database:** `localhost:5432` (User: `refillio`, Pass: `refillio_password`)
-- **Swagger UI:** `http://localhost:8081/swagger-ui.html`
+- **Swagger UI:** `http://localhost:3000/api/swagger-ui.html` (Accessed through Gateway)
 
