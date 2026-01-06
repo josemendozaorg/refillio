@@ -6,11 +6,10 @@ part 'http_client_provider.g.dart';
 
 @riverpod
 Dio dio(Ref ref) {
-  // For Flutter Web, using an empty baseUrl or a relative path 
-  // allows the browser to resolve the request against the same origin.
-  // This works perfectly with our Nginx Reverse Proxy strategy.
+  // For Flutter Web, using an empty baseUrl allows the browser 
+  // to resolve requests like '/api/...' against the current origin.
   return Dio(BaseOptions(
-    baseUrl: '/', 
+    baseUrl: '', 
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));
