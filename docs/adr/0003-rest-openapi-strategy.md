@@ -8,17 +8,17 @@ The backend logic must be accessible to the Flutter mobile app now, but potentia
 We considered gRPC and REST.
 
 ## Decision
-We will expose the backend via **REST APIs**, adhering to a **Code-First OpenAPI Strategy**.
+We will expose the backend via **REST APIs**, adhering to a **Code-First OpenAPI Strategy** and a **Reverse Proxy Architecture**.
 1.  **Source of Truth:** Java `@RestController` code and DTO classes.
 2.  **Spec Generation:** `springdoc-openapi` generates the `openapi.json` at build/runtime.
 3.  **Client Generation:** `openapi-generator` builds the Flutter (Dart) client from the generated spec.
+4.  **Gateway:** The Mobile Web container (Nginx) acts as a reverse proxy, forwarding `/api` requests to the Backend service.
 
 ## Justification
+*   **Unified Origin:** By using Nginx to proxy `/api`, the frontend and backend appear to the browser as a single origin. This eliminates **CORS** (Cross-Origin Resource Sharing) issues entirely.
+*   **Security:** The backend container remains private within the Docker network. Only the Nginx Gateway is exposed to the public internet (or Coolify URL).
+*   **Environment Agnostic:** Flutter Web code uses relative paths (`/api/...`), making the build artifact identical across Local, Staging, and Production environments without needing to recompile with different URLs.
 *   **AI Agent Compatibility:** AI Agents write high-quality Java code faster and more accurately than they edit massive YAML specification files. This leverages the agent's strength in the primary language (Java).
-*   **Decoupling:** The API specification acts as a contract. We can change the backend implementation without breaking clients as long as the contract holds.
-*   **Code Generation:** We can use `openapi-generator` to automatically build the Dart (Flutter) client networking code, eliminating manual JSON parsing errors.
-*   **Tooling:** REST is universally supported. Debugging via `curl`, Postman, or the Browser Network tab is significantly easier than debugging binary gRPC streams.
-*   **Velocity:** Spring Boot + `springdoc-openapi` allows rapid iteration. You change a Java field, and the spec updates instantly.
 
 ## Consequences
 *   **Positive:** **Zero Drift.** The spec matches the code because it is generated *from* the code.
