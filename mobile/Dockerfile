@@ -11,6 +11,9 @@ RUN flutter doctor
 # Copy source code
 COPY . .
 
+# Install dependencies
+RUN flutter pub get
+
 # Build Web
 RUN flutter build web --release
 

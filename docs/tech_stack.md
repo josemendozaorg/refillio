@@ -6,7 +6,7 @@ This document defines the approved technology choices for the Refillio project. 
 
 | Category | Technology | Version | Justification |
 | :--- | :--- | :--- | :--- |
-| **Language** | Java | 25 | Latest available version in current environment. |
+| **Language** | Java | 21 | Selected for broad Docker image support and stability. |
 | **Framework** | Spring Boot | 4.0.1 | Modern Spring Boot with enhanced Jakarta EE support. |
 | **Architecture** | Spring Modulith | 2.0.1 | Enforces logical module boundaries within the monolith (Boot 4.x compatible). |
 | **Build Tool** | Gradle | 8.x | Kotlin DSL for better type safety in build scripts. |

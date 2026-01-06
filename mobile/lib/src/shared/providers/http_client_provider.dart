@@ -10,7 +10,7 @@ Dio dio(Ref ref) {
   // we use localhost if running in browser or 10.0.2.2 if on Android emulator.
   // Since we are focusing on Web Preview for now:
   return Dio(BaseOptions(
-    baseUrl: 'http://localhost:8080',
+    baseUrl: 'http://localhost:8081',
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));

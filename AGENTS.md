@@ -6,7 +6,7 @@ Refillio is a "Mini-ERP for the Home" designed to automate the procurement of es
 **Reference:** See `product_spec.md` for detailed feature specifications and roadmap.
 
 ## 2. Technology Stack
-- **Backend:** Java 25, Spring Boot 4.0.1, Gradle (Kotlin DSL).
+- **Backend:** Java 21, Spring Boot 4.0.1, Gradle (Kotlin DSL).
 - **Mobile:** Flutter, Dart, Riverpod (State Management).
 - **Database:** PostgreSQL (with Flyway for migrations).
 - **API Strategy:** REST with strict OpenAPI (Swagger) definitions.
@@ -122,3 +122,16 @@ refillio/
     - `fix(mobile): resolve layout overflow`
     - `chore(deps): update spring boot`
 - **Secrets:** NEVER commit API keys or credentials. Use environment variables.
+
+## 9. Local Deployment & Testing
+### Commands
+- **Start Stack:** `docker compose up --build -d`
+- **Stop Stack:** `docker compose down`
+- **View Logs:** `docker compose logs -f [service_name]`
+
+### Access Points
+- **Backend API:** `http://localhost:8081` (Mapping to container port 8080)
+- **Mobile Web:** `http://localhost:3000`
+- **Database:** `localhost:5432` (User: `refillio`, Pass: `refillio_password`)
+- **Swagger UI:** `http://localhost:8081/swagger-ui.html`
+

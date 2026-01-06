@@ -1,24 +1,15 @@
 # Stage 1: Build
-FROM openjdk:25-slim AS build
+FROM gradle:8-jdk21 AS build
 WORKDIR /app
 
-# Copy gradle files
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle.kts .
-COPY settings.gradle.kts .
-
-# Download dependencies (cache layer)
-RUN ./gradlew dependencies --no-daemon || true
-
 # Copy source code
-COPY src src
+COPY . .
 
 # Build application
-RUN ./gradlew build -x test --no-daemon
+RUN gradle build -x test --no-daemon
 
 # Stage 2: Run
-FROM openjdk:25-slim
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 # Copy executable from build stage
