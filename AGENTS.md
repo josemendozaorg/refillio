@@ -124,19 +124,36 @@ refillio/
     - `chore(deps): update spring boot`
 - **Secrets:** NEVER commit API keys or credentials. Use environment variables.
 
-## 9. Local Deployment & Testing
-### Commands
-- **Start Stack:** `docker compose up --build -d`
-- **Stop Stack:** `docker compose down`
-- **View Logs:** `docker compose logs -f [service_name]`
+## 9. Deployment & Local Testing
 
-### Deployment Strategy (Coolify Compatibility)
-- **Port Mapping:** The `docker-compose.yml` does NOT use `ports` to avoid host collisions. It uses `expose`. 
-- **Local Dev:** To access the app locally (e.g., `localhost:3000`), you must temporarily add the `ports` section back to `docker-compose.yml` or use an override file.
+### Local Development
+The `docker-compose.yml` is optimized for production deployment (Coolify) and does **not** map ports to the host by default.
 
-### Access Points (When ports are mapped)
-- **Refillio App (Gateway):** `http://localhost:3000` (Serves UI + Proxies `/api` to Backend)
-- **Backend API (Direct):** `http://localhost:8081` (Internal port 8080)
-- **Database:** `localhost:5432` (User: `refillio`, Pass: `refillio_password`)
-- **Swagger UI:** `http://localhost:3000/api/swagger-ui.html` (Accessed through Gateway)
+**To run locally with accessible ports:**
+1.  Create an override file: `cp docker-compose.override.yml.example docker-compose.override.yml`
+2.  Start the stack: `docker compose up --build -d`
+3.  Access:
+    - **App:** `http://localhost:3000`
+    - **Backend:** `http://localhost:8080`
+    - **DB:** `localhost:5432`
+
+### Coolify Deployment Strategy
+This project uses a "Coolify-First" configuration:
+1.  **Network:** All services live in the `refillio_net` bridge network.
+2.  **Expose:** We use `expose` (internal ports) instead of `ports` (host binding) to prevent conflicts on the VPS.
+    - Backend: Exposes `8080`
+    - Mobile: Exposes `80`
+3.  **Container Names:** Explicit names (`refillio_backend`, `refillio_mobile`) ensure reliable internal DNS resolution.
+
+**Critical: Coolify UI Configuration**
+After deploying, you **MUST** manually configure the ports in the Coolify UI, as it does not auto-detect `expose` directives for routing.
+1.  **Backend Service:**
+    - Go to **Settings**.
+    - Set **Ports Exposes** to `8080`.
+    - (Optional) Set a Domain if external API access is needed.
+2.  **Mobile Service:**
+    - Go to **Settings**.
+    - Set **Ports Exposes** to `80`.
+    - Set **Domains** to your public URL (e.g., `https://app.refillio.com`).
+
 
