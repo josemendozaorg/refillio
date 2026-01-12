@@ -129,9 +129,13 @@ refillio/
 - **Stop Stack:** `docker compose down`
 - **View Logs:** `docker compose logs -f [service_name]`
 
-### Access Points
+### Deployment Strategy (Coolify Compatibility)
+- **Port Mapping:** The `docker-compose.yml` does NOT use `ports` to avoid host collisions. It uses `expose`. 
+- **Local Dev:** To access the app locally (e.g., `localhost:3000`), you must temporarily add the `ports` section back to `docker-compose.yml` or use an override file.
+
+### Access Points (When ports are mapped)
 - **Refillio App (Gateway):** `http://localhost:3000` (Serves UI + Proxies `/api` to Backend)
-- **Backend API (Direct):** `http://localhost:8081` (For debugging only)
+- **Backend API (Direct):** `http://localhost:8081` (Internal port 8080)
 - **Database:** `localhost:5432` (User: `refillio`, Pass: `refillio_password`)
 - **Swagger UI:** `http://localhost:3000/api/swagger-ui.html` (Accessed through Gateway)
 
