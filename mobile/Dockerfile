@@ -17,6 +17,12 @@ ARG BUILD_VERSION=1.0.0
 
 # Install dependencies
 RUN flutter pub get
+RUN dart run build_runner build --delete-conflicting-outputs
+
+
+
+# Analyze
+RUN flutter analyze || true
 
 # Build Web
 RUN flutter build web --release \

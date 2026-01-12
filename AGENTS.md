@@ -28,6 +28,7 @@ Refillio is a "Mini-ERP for the Home" designed to automate the procurement of es
 - **Run Tests:** `flutter test`
 - **Generate Code:** `dart run build_runner build` (for Riverpod/Freezed)
 - **Analyze:** `flutter analyze`
+- **Analyze (Fast Local):** `/home/dev/repos/flutter_sdk/bin/flutter analyze mobile/` (Requires local SDK at `/home/dev/repos/flutter_sdk`)
 
 ## 4. Architecture
 
