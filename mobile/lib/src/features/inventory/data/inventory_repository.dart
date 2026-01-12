@@ -19,14 +19,14 @@ class InventoryRepository {
   InventoryRepository(this._dio);
 
   Future<List<InventoryItem>> getPantry(String userId) async {
-    final response = await _dio.get('/inventory', queryParameters: {'userId': userId});
+    final response = await _dio.get('inventory', queryParameters: {'userId': userId});
     final data = response.data as List<dynamic>;
     return data.map((e) => InventoryItem.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<InventoryItem> addToPantry(String userId, AddToPantryRequest request) async {
     final response = await _dio.post(
-      '/inventory',
+      'inventory',
       queryParameters: {'userId': userId},
       data: request.toJson(),
     );
