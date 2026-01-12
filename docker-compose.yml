@@ -5,8 +5,6 @@ services:
       POSTGRES_USER: refillio
       POSTGRES_PASSWORD: refillio_password
       POSTGRES_DB: refillio
-    expose:
-      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -18,8 +16,6 @@ services:
   backend:
     build:
       context: ./backend
-    expose:
-      - "8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/refillio
       SPRING_DATASOURCE_USERNAME: refillio
@@ -35,8 +31,6 @@ services:
       args:
         COMMIT_HASH: ${COMMIT_HASH:-dev}
         BUILD_VERSION: ${BUILD_VERSION:-1.0.0}
-    expose:
-      - "80"
     depends_on:
       - backend
 
