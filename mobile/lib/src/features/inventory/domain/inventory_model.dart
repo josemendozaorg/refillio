@@ -4,7 +4,7 @@ part 'inventory_model.freezed.dart';
 part 'inventory_model.g.dart';
 
 @freezed
-class ProductSummary with _$ProductSummary {
+abstract class ProductSummary with _$ProductSummary {
   const factory ProductSummary({
     required String id,
     required String name,
@@ -15,7 +15,7 @@ class ProductSummary with _$ProductSummary {
 }
 
 @freezed
-class InventoryItem with _$InventoryItem {
+abstract class InventoryItem with _$InventoryItem {
   const factory InventoryItem({
     required String id,
     required String userId,
@@ -28,7 +28,7 @@ class InventoryItem with _$InventoryItem {
 }
 
 @freezed
-class AddToPantryRequest with _$AddToPantryRequest {
+abstract class AddToPantryRequest with _$AddToPantryRequest {
   const factory AddToPantryRequest({
     required String productId,
     required double quantity,

@@ -22,7 +22,7 @@ RUN dart run build_runner build --delete-conflicting-outputs
 
 
 # Analyze
-# RUN flutter analyze
+RUN flutter analyze || true
 
 # Build Web
 RUN flutter build web --release \

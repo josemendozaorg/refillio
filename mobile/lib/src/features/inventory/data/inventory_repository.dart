@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../shared/providers/http_client_provider.dart';
-import '../domain/inventory_model.dart';
-import '../domain/catalog_model.dart';
+import 'package:mobile/src/shared/providers/http_client_provider.dart';
+import 'package:mobile/src/features/inventory/domain/inventory_model.dart';
+import 'package:mobile/src/features/catalog/domain/catalog_model.dart';
 
 part 'inventory_repository.g.dart';
 
