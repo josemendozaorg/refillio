@@ -11,11 +11,17 @@ RUN flutter doctor
 # Copy source code
 COPY . .
 
+# Build Arguments
+ARG COMMIT_HASH=dev
+ARG BUILD_VERSION=1.0.0
+
 # Install dependencies
 RUN flutter pub get
 
 # Build Web
-RUN flutter build web --release
+RUN flutter build web --release \
+    --dart-define=COMMIT_HASH=$COMMIT_HASH \
+    --dart-define=BUILD_VERSION=$BUILD_VERSION
 
 # Stage 2: Serve
 FROM nginx:alpine
