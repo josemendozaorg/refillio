@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../shared/providers/network_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../shared/providers/http_client_provider.dart';
 import '../domain/catalog_model.dart';
 
 part 'catalog_repository.g.dart';
 
 @riverpod
-CatalogRepository catalogRepository(CatalogRepositoryRef ref) {
+CatalogRepository catalogRepository(Ref ref) {
   final dio = ref.watch(dioProvider);
   return CatalogRepository(dio);
 }
@@ -24,6 +25,6 @@ class CatalogRepository {
 }
 
 @riverpod
-Future<List<CanonicalProduct>> allProducts(AllProductsRef ref) {
+Future<List<CanonicalProduct>> allProducts(Ref ref) {
   return ref.watch(catalogRepositoryProvider).getProducts();
 }

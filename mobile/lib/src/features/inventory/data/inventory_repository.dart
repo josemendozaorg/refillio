@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../shared/providers/network_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../shared/providers/http_client_provider.dart';
 import '../domain/inventory_model.dart';
 import '../domain/catalog_model.dart';
 
 part 'inventory_repository.g.dart';
 
 @riverpod
-InventoryRepository inventoryRepository(InventoryRepositoryRef ref) {
+InventoryRepository inventoryRepository(Ref ref) {
   final dio = ref.watch(dioProvider);
   return InventoryRepository(dio);
 }
@@ -34,6 +35,6 @@ class InventoryRepository {
 }
 
 @riverpod
-Future<List<InventoryItem>> pantryItems(PantryItemsRef ref, String userId) {
+Future<List<InventoryItem>> pantryItems(Ref ref, String userId) {
   return ref.watch(inventoryRepositoryProvider).getPantry(userId);
 }

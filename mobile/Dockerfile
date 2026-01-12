@@ -21,6 +21,9 @@ RUN dart run build_runner build --delete-conflicting-outputs
 
 
 
+# Analyze
+# RUN flutter analyze
+
 # Build Web
 RUN flutter build web --release \
     --dart-define=COMMIT_HASH=$COMMIT_HASH \
