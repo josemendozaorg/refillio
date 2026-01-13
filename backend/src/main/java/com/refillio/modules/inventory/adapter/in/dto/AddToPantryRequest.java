@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record AddToPantryRequest(
-    UUID productId,
+    String productId,
     BigDecimal quantity,
     BigDecimal reorderPoint
-) {}
+) {
+    public UUID getProductIdAsUuid() {
+        return UUID.fromString(productId);
+    }
+}

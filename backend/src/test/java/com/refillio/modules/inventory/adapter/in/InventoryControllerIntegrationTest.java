@@ -63,7 +63,7 @@ class InventoryControllerIntegrationTest {
     void addToPantry_ShouldReturnItem() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        AddToPantryRequest request = new AddToPantryRequest(productId, new BigDecimal("2.0"), BigDecimal.ONE);
+        AddToPantryRequest request = new AddToPantryRequest(productId.toString(), new BigDecimal("2.0"), BigDecimal.ONE);
 
         InventoryItem item = new InventoryItem(UUID.randomUUID(), userId, productId, new BigDecimal("2.0"), BigDecimal.ONE, false, null);
         

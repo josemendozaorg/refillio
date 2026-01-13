@@ -39,7 +39,7 @@ public class InventoryController {
     public InventoryItemResponse addToPantry(@RequestParam UUID userId, @RequestBody AddToPantryRequest request) {
         InventoryItem item = inventoryService.addItemToPantry(
                 userId,
-                request.productId(),
+                request.getProductIdAsUuid(),
                 request.quantity(),
                 request.reorderPoint()
         );
