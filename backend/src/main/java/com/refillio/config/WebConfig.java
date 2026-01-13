@@ -16,7 +16,11 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOriginPatterns("*")
+                        .allowedOriginPatterns(
+                            "https://*.josemendoza.dev",
+                            "http://localhost:[*]",
+                            "http://127.0.0.1:[*]"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
