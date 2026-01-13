@@ -22,7 +22,6 @@ jobs:
 
     - uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.10.4' # Match pubspec.yaml environment constraint
         channel: 'stable'
 
     - name: Get Dependencies

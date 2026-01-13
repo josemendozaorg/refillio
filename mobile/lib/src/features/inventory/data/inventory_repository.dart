@@ -36,3 +36,9 @@ class InventoryRepository {
 Future<List<InventoryItem>> pantryItems(Ref ref, String userId) {
   return ref.watch(inventoryRepositoryProvider).getPantry(userId);
 }
+
+@riverpod
+Future<List<InventoryItem>> lowStockItems(Ref ref, String userId) async {
+  final items = await ref.watch(pantryItemsProvider(userId).future);
+  return items.where((item) => item.currentQty <= item.reorderPoint).toList();
+}

@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: refillio_db
     environment:
       POSTGRES_USER: refillio
       POSTGRES_PASSWORD: refillio_password
@@ -13,13 +12,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - refillio_net
 
   backend:
     build:
       context: ./backend
-    container_name: refillio_backend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/refillio
       SPRING_DATASOURCE_USERNAME: refillio
@@ -30,8 +26,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - refillio_net
 
   mobile:
     build:
@@ -39,17 +33,11 @@ services:
       args:
         COMMIT_HASH: ${COMMIT_HASH:-dev}
         BUILD_VERSION: ${BUILD_VERSION:-1.0.0}
-    container_name: refillio_mobile
     expose:
       - "80"
     depends_on:
       - backend
-    networks:
-      - refillio_net
 
 volumes:
   postgres_data:
-
-networks:
-  refillio_net:
-    driver: bridge
+    name: postgres_data_${COOLIFY_PULL_REQUEST_ID:-main}
