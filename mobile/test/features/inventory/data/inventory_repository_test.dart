@@ -26,7 +26,7 @@ void main() {
     // Arrange
     when(mockDio.get(any, queryParameters: anyNamed('queryParameters')))
         .thenAnswer((_) async => Response(
-              requestOptions: RequestOptions(path: '/inventory'),
+              requestOptions: RequestOptions(path: 'inventory'),
               data: [
                 {
                   'id': '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -46,6 +46,6 @@ void main() {
     // Assert
     expect(result, isNotEmpty);
     expect(result.first.currentQty, 2.0);
-    verify(mockDio.get('/inventory', queryParameters: {'userId': '3fa85f64-5717-4562-b3fc-2c963f66afa6'})).called(1);
+    verify(mockDio.get('inventory', queryParameters: {'userId': '3fa85f64-5717-4562-b3fc-2c963f66afa6'})).called(1);
   });
 }

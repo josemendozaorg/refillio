@@ -18,7 +18,7 @@ class CatalogRepository {
   CatalogRepository(this._dio);
 
   Future<List<CanonicalProduct>> getProducts() async {
-    final response = await _dio.get('/catalog/products');
+    final response = await _dio.get('catalog/products');
     final data = response.data as List<dynamic>;
     return data.map((e) => CanonicalProduct.fromJson(e as Map<String, dynamic>)).toList();
   }
