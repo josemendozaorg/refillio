@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../../shared/providers/http_client_provider.dart';
 import '../domain/inventory_model.dart';
@@ -36,3 +37,8 @@ class InventoryRepository {
 Future<List<InventoryItem>> pantryItems(Ref ref, String userId) {
   return ref.watch(inventoryRepositoryProvider).getPantry(userId);
 }
+
+final lowStockItemsProvider = FutureProvider.family<List<InventoryItem>, String>((ref, userId) async {
+  final items = await ref.watch(pantryItemsProvider(userId).future);
+  return items.where((item) => item.currentQty <= item.reorderPoint).toList();
+});
