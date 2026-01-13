@@ -133,3 +133,80 @@ final class PantryItemsFamily extends $Family
   @override
   String toString() => r'pantryItemsProvider';
 }
+
+@ProviderFor(lowStockItems)
+final lowStockItemsProvider = LowStockItemsFamily._();
+
+final class LowStockItemsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<InventoryItem>>,
+          List<InventoryItem>,
+          FutureOr<List<InventoryItem>>
+        >
+    with
+        $FutureModifier<List<InventoryItem>>,
+        $FutureProvider<List<InventoryItem>> {
+  LowStockItemsProvider._({
+    required LowStockItemsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'lowStockItemsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$lowStockItemsHash();
+
+  @override
+  String toString() {
+    return r'lowStockItemsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<InventoryItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<InventoryItem>> create(Ref ref) {
+    final argument = this.argument as String;
+    return lowStockItems(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is LowStockItemsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$lowStockItemsHash() => r'e5a98f0d6f7daba848d3a4383302c836fbab50cb';
+
+final class LowStockItemsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<InventoryItem>>, String> {
+  LowStockItemsFamily._()
+    : super(
+        retry: null,
+        name: r'lowStockItemsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  LowStockItemsProvider call(String userId) =>
+      LowStockItemsProvider._(argument: userId, from: this);
+
+  @override
+  String toString() => r'lowStockItemsProvider';
+}
