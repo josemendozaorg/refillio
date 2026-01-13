@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobile/src/features/system/hello_provider.dart';
-import 'package:mobile/src/shared/app_version.dart';
+import '../hello_provider.dart';
+import '../../../shared/app_version.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile/src/features/catalog/data/catalog_repository.dart';
-import 'package:mobile/src/features/inventory/data/inventory_repository.dart';
-import 'package:mobile/src/features/inventory/domain/inventory_model.dart';
-import 'package:mobile/src/features/catalog/domain/catalog_model.dart';
+import '../../catalog/data/catalog_repository.dart';
+import '../data/inventory_repository.dart';
+import '../domain/inventory_model.dart';
+import '../../catalog/domain/catalog_model.dart';
 
 class AddItemScreen extends ConsumerWidget {
   const AddItemScreen({super.key});
