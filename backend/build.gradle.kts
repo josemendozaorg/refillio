@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "4.0.1"
+	id("org.springframework.boot") version "3.4.1"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -47,7 +47,7 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
 	// Spring Modulith
-	implementation(platform("org.springframework.modulith:spring-modulith-bom:2.0.1"))
+	implementation(platform("org.springframework.modulith:spring-modulith-bom:1.3.1"))
 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 	// implementation("org.springframework.modulith:spring-modulith-starter-jpa")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
