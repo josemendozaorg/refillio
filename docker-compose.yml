@@ -12,8 +12,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - refillio_net
 
   backend:
     build:
@@ -28,8 +26,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - refillio_net
 
   mobile:
     build:
@@ -41,12 +37,7 @@ services:
       - "80"
     depends_on:
       - backend
-    networks:
-      - refillio_net
 
 volumes:
   postgres_data:
-
-networks:
-  refillio_net:
-    name: ${NETWORK_NAME:-refillio_net}
+    name: postgres_data_${COOLIFY_PULL_REQUEST_ID:-main}
