@@ -68,7 +68,7 @@ class AddItemScreen extends ConsumerWidget {
             onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: () async {
               try {
                 final qty = double.tryParse(qtyController.text) ?? 1.0;

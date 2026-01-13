@@ -18,48 +18,82 @@ class HomePage extends ConsumerWidget {
       body: Stack(
         children: [
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.inventory_2_outlined, size: 80, color: Colors.blueGrey),
-                const SizedBox(height: 20),
-                Text(
-                  'Welcome to Refillio',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 10),
-                const Text('Backend Connection Status:'),
-                const SizedBox(height: 10),
-                helloAsync.when(
-                  data: (message) => Column(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.check_circle, color: Colors.green, size: 40),
-                      const SizedBox(height: 10),
+                      Icon(
+                        Icons.inventory_2_outlined,
+                        size: 80,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(height: 24),
                       Text(
-                        message,
-                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                        'Welcome to Refillio',
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Backend Connection Status',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                      ),
+                      const SizedBox(height: 16),
+                      helloAsync.when(
+                        data: (message) => Column(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              message,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        loading: () => const CircularProgressIndicator(),
+                        error: (err, stack) => Column(
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Error: $err',
+                              style: TextStyle(color: Theme.of(context).colorScheme.error),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 24),
+                            FilledButton.icon(
+                              onPressed: () => ref.refresh(helloWorldProvider),
+                              icon: const Icon(Icons.refresh),
+                              label: const Text('Retry'),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  loading: () => const CircularProgressIndicator(),
-                  error: (err, stack) => Column(
-                    children: [
-                      const Icon(Icons.error, color: Colors.red, size: 40),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Error: $err',
-                        style: const TextStyle(color: Colors.red),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: () => ref.refresh(helloWorldProvider),
-                        child: const Text('Retry'),
-                      ),
-                    ],
-                  ),
                 ),
-              ],
+              ),
             ),
           ),
           Positioned(
