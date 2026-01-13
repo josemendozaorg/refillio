@@ -1,7 +1,6 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: ${PROJECT_NAME:-refillio}_db
     environment:
       POSTGRES_USER: refillio
       POSTGRES_PASSWORD: refillio_password
@@ -17,7 +16,6 @@ services:
   backend:
     build:
       context: ./backend
-    container_name: ${PROJECT_NAME:-refillio}_backend
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/refillio
       SPRING_DATASOURCE_USERNAME: refillio
@@ -35,7 +33,6 @@ services:
       args:
         COMMIT_HASH: ${COMMIT_HASH:-dev}
         BUILD_VERSION: ${BUILD_VERSION:-1.0.0}
-    container_name: ${PROJECT_NAME:-refillio}_mobile
     expose:
       - "80"
     depends_on:
