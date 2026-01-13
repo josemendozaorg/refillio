@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:mobile/src/features/inventory/presentation/pantry_screen.dart';
-import 'package:mobile/src/features/inventory/presentation/add_item_screen.dart';
+import '../features/inventory/presentation/pantry_screen.dart';
+import '../features/inventory/presentation/add_item_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',

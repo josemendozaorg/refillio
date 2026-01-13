@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mobile/src/router/app_router.dart';
+import 'router/app_router.dart';
 
 class RefillioApp extends ConsumerWidget {
   const RefillioApp({super.key});
