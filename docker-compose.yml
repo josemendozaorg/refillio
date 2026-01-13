@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: refillio_password
       POSTGRES_DB: refillio
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ${POSTGRES_DATA_VOLUME:-postgres_data}:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U refillio -d refillio"]
       interval: 5s
@@ -21,7 +21,7 @@ services:
       context: ./backend
     container_name: refillio_backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/refillio
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST:-db}:5432/refillio
       SPRING_DATASOURCE_USERNAME: refillio
       SPRING_DATASOURCE_PASSWORD: refillio_password
       SPRING_FLYWAY_ENABLED: "true"
@@ -49,6 +49,7 @@ services:
 
 volumes:
   postgres_data:
+    name: ${POSTGRES_DATA_VOLUME:-postgres_data}
 
 networks:
   refillio_net:
