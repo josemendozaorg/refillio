@@ -15,14 +15,8 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                String allowedOrigins = System.getenv("CORS_ORIGINS");
-                if (allowedOrigins == null || allowedOrigins.isBlank()) {
-                    allowedOrigins = "http://localhost:3000,http://localhost,https://refillio.josemendoza.dev";
-                }
                 registry.addMapping("/api/**")
-                        .allowedOrigins(Arrays.stream(allowedOrigins.split(","))
-                                .map(String::trim)
-                                .toArray(String[]::new))
+                        .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
