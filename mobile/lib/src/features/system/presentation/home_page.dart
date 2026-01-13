@@ -88,7 +88,7 @@ class DashboardScreen extends ConsumerWidget {
             value: pantry.when(
               data: (items) => items.length.toString(),
               loading: () => '...',
-              error: (_, __) => '!',
+              error: (_, _) => '!',
             ),
             icon: Icons.inventory_2_outlined,
             color: Theme.of(context).colorScheme.primaryContainer,
@@ -102,7 +102,7 @@ class DashboardScreen extends ConsumerWidget {
             value: lowStock.when(
               data: (items) => items.length.toString(),
               loading: () => '...',
-              error: (_, __) => '!',
+              error: (_, _) => '!',
             ),
             icon: Icons.warning_amber_rounded,
             color: Theme.of(context).colorScheme.errorContainer,
