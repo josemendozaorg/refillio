@@ -26,9 +26,15 @@ Refillio is a "Mini-ERP for the Home" designed to automate the procurement of es
 - **Install Dependencies:** `flutter pub get`
 - **Run (Dev):** `flutter run`
 - **Run Tests:** `flutter test`
-- **Generate Code:** `dart run build_runner build` (for Riverpod/Freezed)
+- **Generate Code:** `dart run build_runner build --delete-conflicting-outputs`
 - **Analyze:** `flutter analyze`
-- **Analyze (Fast Local):** `/home/dev/repos/flutter_sdk/bin/flutter analyze mobile/` (Requires local SDK at `/home/dev/repos/flutter_sdk`)
+
+### 🛠️ Pre-commit Checklist
+Before every commit, you **MUST** run:
+1.  `flutter analyze` (Mobile)
+2.  `flutter test` (Mobile)
+3.  `./gradlew spotlessCheck` (Backend - if available)
+4.  `./gradlew test` (Backend)
 
 ## 4. Architecture
 
@@ -131,10 +137,11 @@ The `docker-compose.yml` is optimized for production deployment (Coolify) and do
 
 **To run locally with accessible ports:**
 1.  Create an override file: `cp docker-compose.override.yml.example docker-compose.override.yml`
-2.  Start the stack: `docker compose up --build -d`
-3.  Access:
+2.  Update `docker-compose.override.yml` if port conflicts occur (e.g., set backend to `8081:8080`).
+3.  Start the stack: `docker compose up --build -d`
+4.  Access:
     - **App:** `http://localhost:3000`
-    - **Backend:** `http://localhost:8080`
+    - **Backend:** `http://localhost:8081` (or `8080` if default)
     - **DB:** `localhost:5432`
 
 ### Coolify Deployment Strategy
