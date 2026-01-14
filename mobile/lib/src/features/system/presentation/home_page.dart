@@ -62,13 +62,14 @@ class DashboardScreen extends ConsumerWidget {
           'Hello!',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
+                color: const Color(0xFF1A1A1A),
               ),
         ),
         const SizedBox(height: 4),
         Text(
           'Manage your pantry effortlessly.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.outline,
+                color: Colors.grey.shade600,
               ),
         ),
       ],
@@ -92,6 +93,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
             icon: Icons.inventory_2_outlined,
             color: Theme.of(context).colorScheme.primaryContainer,
+            onColor: Theme.of(context).colorScheme.onPrimaryContainer,
             onTap: () => context.push('/inventory'),
           ),
         ),
@@ -106,6 +108,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
             icon: Icons.warning_amber_rounded,
             color: Theme.of(context).colorScheme.errorContainer,
+            onColor: Theme.of(context).colorScheme.onErrorContainer,
             onTap: () {},
           ),
         ),
@@ -117,7 +120,8 @@ class DashboardScreen extends ConsumerWidget {
     return Text(
       title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
           ),
     );
   }
@@ -181,9 +185,9 @@ class DashboardScreen extends ConsumerWidget {
                           size: 20,
                         ),
                       ),
-                      title: Text(item.product?.name ?? 'Unknown'),
+                      title: Text(item.product?.name ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.w500)),
                       subtitle: Text('Only ${item.currentQty} left'),
-                      trailing: const Icon(Icons.chevron_right),
+                      trailing: const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
                     ),
                   ))
               .toList(),
@@ -200,6 +204,7 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final Color onColor;
   final VoidCallback onTap;
 
   const _StatCard({
@@ -207,33 +212,51 @@ class _StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.color,
+    required this.onColor,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: color,
-      borderRadius: BorderRadius.circular(20),
+    return Card(
+      elevation: 0,
+      color: Colors.white, // Use white for clean look, with colored icon/text or border
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(8),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 28),
-              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Icon(icon, size: 24, color: onColor),
+              ),
+              const SizedBox(height: 16),
               Text(
                 value,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1A1A1A),
                     ),
               ),
+              const SizedBox(height: 4),
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -256,20 +279,34 @@ class _QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton.filledTonal(
-          onPressed: onTap,
-          icon: Icon(icon),
-          iconSize: 28,
-          padding: const EdgeInsets.all(16),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: Icon(icon, size: 24, color: Theme.of(context).primaryColor),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF1A1A1A),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
-      ],
+      ),
     );
   }
 }
