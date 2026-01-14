@@ -17,7 +17,6 @@ services:
     build:
       context: ./backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${SERVICE_NAME_DB:-db}:5432/refillio
       SPRING_DATASOURCE_USERNAME: refillio
       SPRING_DATASOURCE_PASSWORD: refillio_password
       SPRING_FLYWAY_ENABLED: "true"
