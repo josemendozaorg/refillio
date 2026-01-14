@@ -17,10 +17,13 @@ services:
     build:
       context: ./backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/refillio
-      SPRING_DATASOURCE_USERNAME: refillio
-      SPRING_DATASOURCE_PASSWORD: refillio_password
-      SPRING_FLYWAY_ENABLED: "true"
+      # Explicitly set SPRING_DATASOURCE_URL using the SERVICE_NAME_DB variable.
+      # This overrides any incorrect auto-injected value from Coolify.
+      # We rely on Coolify providing SERVICE_NAME_DB in the deployment environment.
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME_DB}:5432/refillio
+      - SPRING_DATASOURCE_USERNAME=refillio
+      - SPRING_DATASOURCE_PASSWORD=refillio_password
+      - SPRING_FLYWAY_ENABLED=true
     expose:
       - "8080"
     depends_on:
