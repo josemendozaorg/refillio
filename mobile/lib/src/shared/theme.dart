@@ -109,7 +109,7 @@ class AppTheme {
         dense: true,
       ),
 
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderRadius)),
         backgroundColor: Colors.white,
       ),
@@ -188,7 +188,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-       dialogTheme: DialogTheme(
+       dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderRadius)),
       ),
     );
