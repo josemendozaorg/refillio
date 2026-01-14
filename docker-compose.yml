@@ -16,15 +16,11 @@ services:
   backend:
     build:
       context: ./backend
-    # We override the entrypoint to dynamically resolve the database host at runtime.
-    # This is necessary because Coolify injects SERVICE_NAME_DB into the container,
-    # but Docker Compose cannot resolve it at build time.
-    # We pass it as a command-line argument, which overrides environment variables.
-    entrypoint: /bin/sh -c "java -jar app.jar --spring.datasource.url=jdbc:postgresql://$${SERVICE_NAME_DB}:5432/refillio"
     environment:
-      - SPRING_DATASOURCE_USERNAME=refillio
-      - SPRING_DATASOURCE_PASSWORD=refillio_password
-      - SPRING_FLYWAY_ENABLED=true
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/refillio
+      SPRING_DATASOURCE_USERNAME: refillio
+      SPRING_DATASOURCE_PASSWORD: refillio_password
+      SPRING_FLYWAY_ENABLED: "true"
     expose:
       - "8080"
     depends_on:
