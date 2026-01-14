@@ -17,10 +17,8 @@ services:
     build:
       context: ./backend
     environment:
-      # Use SPRING_APPLICATION_JSON to enable runtime placeholder resolution.
-      # This bypasses Docker Compose build-time substitution and uses the
-      # correct SERVICE_NAME_DB injected by Coolify at runtime.
-      - SPRING_APPLICATION_JSON={"spring.datasource.url":"jdbc:postgresql://$${SERVICE_NAME_DB}:5432/refillio"}
+      # Use SPRING_APPLICATION_JSON with single quotes to ensure it passes through correctly.
+      - 'SPRING_APPLICATION_JSON={"spring.datasource.url":"jdbc:postgresql://$${SERVICE_NAME_DB}:5432/refillio"}'
       - SPRING_DATASOURCE_USERNAME=refillio
       - SPRING_DATASOURCE_PASSWORD=refillio_password
       - SPRING_FLYWAY_ENABLED=true
