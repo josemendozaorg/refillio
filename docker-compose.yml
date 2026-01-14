@@ -17,6 +17,7 @@ services:
     build:
       context: ./backend
     environment:
+      - SERVICE_NAME_DB=${SERVICE_NAME_DB:-db}
       - SPRING_DATASOURCE_USERNAME=refillio
       - SPRING_DATASOURCE_PASSWORD=refillio_password
       - SPRING_FLYWAY_ENABLED=true
