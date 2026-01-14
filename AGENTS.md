@@ -124,6 +124,8 @@ refillio/
     - **Widget:** Test critical UI flows.
 
 ## 8. Git Workflow
+- **Branching Strategy:** ALL changes MUST be made in a separate feature branch.
+- **Pull Requests:** Submit all changes via a Pull Request (PR). Direct commits to `main` or `master` are strictly forbidden.
 - **Commit Messages:** Conventional Commits.
     - `feat(backend): add allegro scraper`
     - `fix(mobile): resolve layout overflow`
