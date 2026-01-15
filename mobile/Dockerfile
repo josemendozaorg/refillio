@@ -14,7 +14,6 @@ COPY . .
 # Build Arguments
 ARG COMMIT_HASH=dev
 ARG BUILD_VERSION=1.0.0
-ARG API_URL=/api/v1/
 
 # Install dependencies
 RUN flutter pub get
@@ -29,8 +28,7 @@ RUN flutter test
 # Build Web
 RUN flutter build web --release \
     --dart-define=COMMIT_HASH=$COMMIT_HASH \
-    --dart-define=BUILD_VERSION=$BUILD_VERSION \
-    --dart-define=API_URL=$API_URL
+    --dart-define=BUILD_VERSION=$BUILD_VERSION
 
 # Stage 2: Serve
 FROM nginx:alpine

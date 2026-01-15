@@ -5,13 +5,10 @@ part 'http_client_provider.g.dart';
 
 @riverpod
 Dio dio(Ref ref) {
-  const apiUrl = String.fromEnvironment(
-    'API_URL',
-    defaultValue: 'http://localhost:8081/api/v1/',
-  );
-  
+  // For Flutter Web, using an empty baseUrl allows the browser 
+  // to resolve requests like '/api/...' against the current origin.
   return Dio(BaseOptions(
-    baseUrl: apiUrl,
+    baseUrl: '/api/v1/', 
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));
