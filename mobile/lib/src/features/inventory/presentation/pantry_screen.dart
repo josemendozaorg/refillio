@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../data/inventory_repository.dart';
 
 class PantryScreen extends ConsumerWidget {
@@ -35,9 +37,9 @@ class PantryScreen extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 8, bottom: 80),
             itemBuilder: (context, index) {
               final item = items[index];
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: ShadCard(
                   child: ListTile(
                     title: Text(item.product?.name ?? 'Unknown Product',
                         style: const TextStyle(fontWeight: FontWeight.w600)),
@@ -49,9 +51,11 @@ class PantryScreen extends ConsumerWidget {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove_circle_outline),
-                          tooltip: 'Consumed 1',
+                        ShadButton.outline(
+                          icon: const Icon(Icons.remove_circle_outline, size: 18),
+                          width: 40,
+                          height: 40,
+                          padding: EdgeInsets.zero,
                           onPressed: () async {
                             try {
                               await ref
@@ -60,55 +64,58 @@ class PantryScreen extends ConsumerWidget {
                               // Refresh list
                               ref.invalidate(pantryItemsProvider(demoUserId));
                               if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Consumed 1 unit.'),
-                                      duration: Duration(seconds: 1)),
+                                ShadToaster.of(context).show(
+                                  const ShadToast(
+                                    title: Text('Consumed 1 unit.'),
+                                  ),
                                 );
                               }
                             } catch (e) {
                               if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Error: $e'),
-                                      backgroundColor: Colors.red),
+                                ShadToaster.of(context).show(
+                                   ShadToast.destructive(
+                                    title: Text('Error: $e'),
+                                  ),
                                 );
                               }
                             }
                           },
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline, color: Colors.red),
-                          tooltip: 'I am out!',
-                          onPressed: () async {
-                            try {
-                              await ref
-                                  .read(inventoryRepositoryProvider)
-                                  .logConsumption(item.id, 0, 'exhausted');
-                              ref.invalidate(pantryItemsProvider(demoUserId));
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'Marked as exhausted. Added to shopping list.')),
+                        const SizedBox(width: 8),
+                         ShadButton.ghost(
+                           icon: const Icon(Icons.delete_outline, color: Colors.red, size: 18),
+                           width: 40,
+                           height: 40,
+                           padding: EdgeInsets.zero,
+                           onPressed: () async {
+                             try {
+                               await ref
+                                   .read(inventoryRepositoryProvider)
+                                   .logConsumption(item.id, 0, 'exhausted');
+                               ref.invalidate(pantryItemsProvider(demoUserId));
+                               if (context.mounted) {
+                                 ShadToaster.of(context).show(
+                                   const ShadToast(
+                                       title: Text(
+                                           'Marked as exhausted. Added to shopping list.')),
+                                 );
+                               }
+                             } catch (e) {
+                               if (context.mounted) {
+                                  ShadToaster.of(context).show(
+                                   ShadToast.destructive(
+                                    title: Text('Error: $e'),
+                                  ),
                                 );
-                              }
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text('Error: $e'),
-                                      backgroundColor: Colors.red),
-                                );
-                              }
-                            }
-                          },
-                        ),
+                               }
+                             }
+                           },
+                         ),
                       ],
                     ),
                   ),
                 ),
-              );
+              ).animate().fade().slideY(begin: 0.1, end: 0, duration: 400.ms, delay: (50 * index).ms);
             },
           );
         },

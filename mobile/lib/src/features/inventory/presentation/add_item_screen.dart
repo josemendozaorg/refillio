@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../catalog/data/catalog_repository.dart';
 import '../data/inventory_repository.dart';
 import '../domain/inventory_model.dart';
@@ -33,7 +35,7 @@ class AddItemScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.add_circle, color: Colors.grey),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 onTap: () => _showAddDialog(context, ref, product),
-              );
+              ).animate().fade().slideX(begin: 0.1, end: 0, delay: (30 * index).ms);
             },
           );
         },
@@ -56,26 +58,26 @@ class AddItemScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 8),
-            TextField(
+            ShadInput(
               controller: qtyController,
-              decoration: const InputDecoration(labelText: 'Current Quantity'),
+              placeholder: const Text('Current Quantity'),
               keyboardType: TextInputType.number,
               autofocus: true,
             ),
             const SizedBox(height: 16),
-            TextField(
+            ShadInput(
               controller: parController,
-              decoration: const InputDecoration(labelText: 'Reorder Point (Par Level)'),
+              placeholder: const Text('Reorder Point (Par Level)'),
               keyboardType: TextInputType.number,
             ),
           ],
         ),
         actions: [
-          TextButton(
+          ShadButton.ghost(
             onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
-          FilledButton(
+          ShadButton(
             onPressed: () async {
               try {
                 final qty = double.tryParse(qtyController.text) ?? 1.0;

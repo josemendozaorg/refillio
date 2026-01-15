@@ -1,7 +1,8 @@
 plugins {
 	java
-	id("org.springframework.boot") version "4.0.1"
-	id("io.spring.dependency-management") version "1.1.7"
+	id("org.springframework.boot") version "3.3.6"
+	id("io.spring.dependency-management") version "1.1.6"
+	id("io.freefair.lombok") version "8.11"
 }
 
 group = "com.refillio"
@@ -31,9 +32,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.flywaydb:flyway-database-postgresql")
-	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
-	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
@@ -46,10 +45,9 @@ dependencies {
 	testImplementation("org.testcontainers:testcontainers-postgresql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	// Spring Modulith
-	implementation(platform("org.springframework.modulith:spring-modulith-bom:2.0.1"))
+	// Spring Modulith (v1.2.x for Boot 3.3)
+	implementation(platform("org.springframework.modulith:spring-modulith-bom:1.2.4"))
 	implementation("org.springframework.modulith:spring-modulith-starter-core")
-	// implementation("org.springframework.modulith:spring-modulith-starter-jpa")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 
 	// OpenAPI

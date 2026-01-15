@@ -98,17 +98,48 @@ class InventoryServiceTest {
     }
 
     @Test
-    void logConsumption_Exhausted_ShouldSetZeroAndTriggerReorder() {
+    void logConsumption_Exhausted_ShouldSetZeroAndTriggerDelete() {
         InventoryItem item = new InventoryItem(inventoryItemId, userId, productId, new BigDecimal("2.5"), new BigDecimal("2.0"), true, null);
 
         when(inventoryRepository.findById(inventoryItemId)).thenReturn(Optional.of(item));
 
-        inventoryService.logConsumption(inventoryItemId, BigDecimal.ZERO, "exhausted"); // Qty is ignored if exhausted, sets to 0
+        inventoryService.logConsumption(inventoryItemId, BigDecimal.ZERO, "exhausted");
 
-        assertEquals(BigDecimal.ZERO, item.getCurrentQty());
-        verify(consumptionLogRepository).save(any(ConsumptionLog.class));
-        verify(inventoryRepository).save(item);
         // Should trigger reorder (0.0 <= 2.0)
+        verify(procurementService).createOrUpdateDraftOrder(eq(userId), eq(productId), anyInt());
+        // Should delete instead of save
+        verify(inventoryRepository).delete(item);
+        verify(inventoryRepository, never()).save(item);
+    }
+
+    @Test
+    void logConsumption_WhenZeroQty_ShouldThrowException() {
+        InventoryItem item = new InventoryItem(inventoryItemId, userId, productId, BigDecimal.ZERO, new BigDecimal("1.0"), false, null);
+
+        when(inventoryRepository.findById(inventoryItemId)).thenReturn(Optional.of(item));
+
+        assertThrows(InsufficientInventoryException.class, () ->
+            inventoryService.logConsumption(inventoryItemId, new BigDecimal("1.0"), "opened")
+        );
+        
+        verify(inventoryRepository, never()).save(item);
+        verify(consumptionLogRepository, never()).save(any());
+    }
+
+    @Test
+    void logConsumption_WhenQtyBecomesZero_ShouldDelete() {
+        InventoryItem item = new InventoryItem(inventoryItemId, userId, productId, new BigDecimal("1.0"), new BigDecimal("1.0"), false, null);
+
+        when(inventoryRepository.findById(inventoryItemId)).thenReturn(Optional.of(item));
+
+        // Consume 1.0 from 1.0 -> 0.0
+        inventoryService.logConsumption(inventoryItemId, new BigDecimal("1.0"), "opened");
+
+        verify(consumptionLogRepository).save(any(ConsumptionLog.class));
+        verify(inventoryRepository).delete(item);
+        verify(inventoryRepository, never()).save(item);
+        
+        // Should also trigger reorder because 0.0 <= 1.0
         verify(procurementService).createOrUpdateDraftOrder(eq(userId), eq(productId), anyInt());
     }
 

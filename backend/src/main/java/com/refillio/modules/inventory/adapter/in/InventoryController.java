@@ -52,6 +52,11 @@ public class InventoryController {
         inventoryService.logConsumption(id, request.amount(), request.eventType());
         return ResponseEntity.ok().build();
     }
+
+    @ExceptionHandler(com.refillio.modules.inventory.domain.InsufficientInventoryException.class)
+    public ResponseEntity<String> handleInsufficientInventory(com.refillio.modules.inventory.domain.InsufficientInventoryException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
     
     private InventoryItemResponse toDto(InventoryItem item) {
         CanonicalProduct product = catalogService.getProductById(item.getCanonicalProductId())
