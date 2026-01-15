@@ -20,6 +20,6 @@ public class ConsumptionLog {
     private LocalDateTime occurredAt;
 
     public static ConsumptionLog create(UUID inventoryItemId, BigDecimal qtyConsumed, String eventType) {
-        return new ConsumptionLog(UUID.randomUUID(), inventoryItemId, qtyConsumed, eventType, LocalDateTime.now());
+        return new ConsumptionLog(null, inventoryItemId, qtyConsumed, eventType, LocalDateTime.now());
     }
 }

@@ -39,7 +39,9 @@ public class JpaConsumptionLogRepositoryAdapter implements ConsumptionLogReposit
 
     private JpaConsumptionLog toEntity(ConsumptionLog domain) {
         JpaConsumptionLog entity = new JpaConsumptionLog();
-        entity.setId(domain.getId());
+        if (domain.getId() != null) {
+            entity.setId(domain.getId());
+        }
         entity.setInventoryItemId(domain.getInventoryItemId());
         entity.setQtyConsumed(domain.getQtyConsumed());
         entity.setEventType(domain.getEventType());
