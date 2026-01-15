@@ -49,7 +49,6 @@ public class InventoryService {
     }
 
     @Transactional
-    @Transactional
     public void logConsumption(UUID inventoryItemId, BigDecimal qtyConsumed, String eventType) {
         InventoryItem item = inventoryRepository.findById(inventoryItemId)
             .orElseThrow(() -> new IllegalArgumentException("Inventory Item not found: " + inventoryItemId));

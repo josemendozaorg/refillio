@@ -1,8 +1,7 @@
 plugins {
 	java
 	id("org.springframework.boot") version "3.3.6"
-	id("io.spring.dependency-management") version "1.1.6"
-	id("io.freefair.lombok") version "8.11"
+	id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.refillio"
@@ -10,9 +9,9 @@ version = "0.0.1-SNAPSHOT"
 description = "Demo project for Spring Boot"
 
 java {
-//	toolchain {
-//		languageVersion = JavaLanguageVersion.of(21)
-//	}
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 configurations {
@@ -28,11 +27,18 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-flyway")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	
+	// Flyway
+	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
+	
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+	
 	runtimeOnly("org.postgresql:postgresql")
+	
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
@@ -45,7 +51,7 @@ dependencies {
 	testImplementation("org.testcontainers:testcontainers-postgresql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-	// Spring Modulith (v1.2.x for Boot 3.3)
+	// Spring Modulith
 	implementation(platform("org.springframework.modulith:spring-modulith-bom:1.2.4"))
 	implementation("org.springframework.modulith:spring-modulith-starter-core")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
@@ -55,7 +61,7 @@ dependencies {
 
 	// Scraper
 	implementation("org.jsoup:jsoup:1.18.1")
-
+	
 	// DevTools
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }

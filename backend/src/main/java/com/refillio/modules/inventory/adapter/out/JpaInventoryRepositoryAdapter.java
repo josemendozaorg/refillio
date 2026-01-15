@@ -39,6 +39,11 @@ public class JpaInventoryRepositoryAdapter implements InventoryRepository {
     public InventoryItem save(InventoryItem item) {
         return toDomain(repository.save(toEntity(item)));
     }
+
+    @Override
+    public void delete(InventoryItem item) {
+        repository.delete(toEntity(item));
+    }
     
     private InventoryItem toDomain(JpaInventoryItem entity) {
         return new InventoryItem(

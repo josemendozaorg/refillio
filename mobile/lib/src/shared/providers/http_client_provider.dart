@@ -5,10 +5,9 @@ part 'http_client_provider.g.dart';
 
 @riverpod
 Dio dio(Ref ref) {
-  // For Flutter Web, using an empty baseUrl allows the browser 
-  // to resolve requests like '/api/...' against the current origin.
+  // For local development, pointing directly to the backend.
   return Dio(BaseOptions(
-    baseUrl: '/api/v1/', 
+    baseUrl: 'http://localhost:8081/api/v1/', 
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));

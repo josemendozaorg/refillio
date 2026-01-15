@@ -15,7 +15,7 @@ class AppTheme {
       subThemesData: const FlexSubThemesData(
         blendOnLevel: 10,
         blendOnColors: false,
-        useTextTheme: true,
+        // useTextTheme: true, // Deprecated
         useM2StyleDividerInM3: true,
         defaultRadius: 8.0,
         elevatedButtonSchemeColor: SchemeColor.onPrimaryContainer,
@@ -46,7 +46,7 @@ class AppTheme {
       blendLevel: 13,
       subThemesData: const FlexSubThemesData(
         blendOnLevel: 20,
-        useTextTheme: true,
+        // useTextTheme: true, // Deprecated
         useM2StyleDividerInM3: true,
         defaultRadius: 8.0,
         elevatedButtonSchemeColor: SchemeColor.onPrimaryContainer,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 import '../data/inventory_repository.dart';
 
 class PantryScreen extends ConsumerWidget {
@@ -52,7 +52,6 @@ class PantryScreen extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ShadButton.outline(
-                          icon: const Icon(Icons.remove_circle_outline, size: 18),
                           width: 40,
                           height: 40,
                           padding: EdgeInsets.zero,
@@ -80,36 +79,37 @@ class PantryScreen extends ConsumerWidget {
                               }
                             }
                           },
+                          child: const Icon(Icons.remove_circle_outline, size: 18),
                         ),
                         const SizedBox(width: 8),
                          ShadButton.ghost(
-                           icon: const Icon(Icons.delete_outline, color: Colors.red, size: 18),
-                           width: 40,
-                           height: 40,
-                           padding: EdgeInsets.zero,
-                           onPressed: () async {
-                             try {
-                               await ref
-                                   .read(inventoryRepositoryProvider)
-                                   .logConsumption(item.id, 0, 'exhausted');
-                               ref.invalidate(pantryItemsProvider(demoUserId));
-                               if (context.mounted) {
-                                 ShadToaster.of(context).show(
-                                   const ShadToast(
-                                       title: Text(
-                                           'Marked as exhausted. Added to shopping list.')),
-                                 );
-                               }
-                             } catch (e) {
-                               if (context.mounted) {
+                            width: 40,
+                            height: 40,
+                            padding: EdgeInsets.zero,
+                            onPressed: () async {
+                              try {
+                                await ref
+                                    .read(inventoryRepositoryProvider)
+                                    .logConsumption(item.id, 0, 'exhausted');
+                                ref.invalidate(pantryItemsProvider(demoUserId));
+                                if (context.mounted) {
                                   ShadToaster.of(context).show(
-                                   ShadToast.destructive(
-                                    title: Text('Error: $e'),
-                                  ),
-                                );
-                               }
-                             }
-                           },
+                                    const ShadToast(
+                                        title: Text(
+                                            'Marked as exhausted. Added to shopping list.')),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                   ShadToaster.of(context).show(
+                                    ShadToast.destructive(
+                                     title: Text('Error: $e'),
+                                   ),
+                                 );
+                                }
+                              }
+                            },
+                            child: const Icon(Icons.delete_outline, color: Colors.red, size: 18),
                          ),
                       ],
                     ),

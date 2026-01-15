@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 import '../../catalog/data/catalog_repository.dart';
 import '../data/inventory_repository.dart';
 import '../domain/inventory_model.dart';

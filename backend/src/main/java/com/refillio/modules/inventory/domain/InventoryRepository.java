@@ -9,4 +9,5 @@ public interface InventoryRepository {
     Optional<InventoryItem> findByUserIdAndProductId(UUID userId, UUID productId);
     Optional<InventoryItem> findById(UUID id);
     InventoryItem save(InventoryItem item);
+    void delete(InventoryItem item);
 }
