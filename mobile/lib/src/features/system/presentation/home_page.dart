@@ -1,6 +1,8 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../inventory/data/inventory_repository.dart';
 import '../../inventory/domain/inventory_model.dart';
 import '../../../shared/app_version.dart';
@@ -16,100 +18,156 @@ class DashboardScreen extends ConsumerWidget {
     final lowStockAsync = ref.watch(lowStockItemsProvider(demoUserId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Refillio'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle_outlined),
-            onPressed: () {},
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () => ref.refresh(pantryItemsProvider(demoUserId).future),
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
-          children: [
-            _buildWelcomeHeader(context),
-            const SizedBox(height: 24),
-            _buildStatCards(context, pantryAsync, lowStockAsync),
-            const SizedBox(height: 32),
-            _buildSectionHeader(context, 'Quick Actions'),
-            const SizedBox(height: 16),
-            _buildQuickActions(context),
-            const SizedBox(height: 32),
-            _buildSectionHeader(context, 'Low Stock Alerts'),
-            const SizedBox(height: 16),
-            _buildLowStockList(context, lowStockAsync),
-            const SizedBox(height: 40),
-            Center(
-              child: Text(
-                'Refillio v${AppVersion.displayString}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+      body: Stack(
+        children: [
+          // Background Glows
+          Positioned(
+            top: -100,
+            left: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+                child: Container(color: Colors.transparent),
               ),
             ),
-          ],
-        ),
+          ),
+          SafeArea(
+            child: RefreshIndicator(
+              onRefresh: () => ref.refresh(pantryItemsProvider(demoUserId).future),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                children: [
+                  _buildHeader(context),
+                  const SizedBox(height: 32),
+                  _buildSummaryCard(context, pantryAsync, lowStockAsync),
+                  const SizedBox(height: 40),
+                  _buildSectionHeader(context, 'Low Stock Alerts'),
+                  const SizedBox(height: 16),
+                  _buildLowStockCarousel(context, lowStockAsync),
+                  const SizedBox(height: 40),
+                  _buildSectionHeader(context, 'Quick Actions'),
+                  const SizedBox(height: 20),
+                  _buildQuickActions(context),
+                  const SizedBox(height: 60),
+                  Center(
+                    child: Text(
+                      'Refillio v${AppVersion.displayString}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey.withValues(alpha: 0.5),
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildWelcomeHeader(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          'Hello!',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Refillio',
+              style: GoogleFonts.outfit(
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF1A1A1A),
+                letterSpacing: -0.5,
               ),
+            ),
+            Text(
+              'Your smart pantry manager',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.5),
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 4),
-        Text(
-          'Manage your pantry effortlessly.',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey.shade600,
-              ),
+        _GlassIcon(
+          icon: Icons.person_outline_rounded,
+          onTap: () {},
         ),
       ],
     );
   }
 
-  Widget _buildStatCards(
+  Widget _buildSummaryCard(
     BuildContext context,
     AsyncValue<List<InventoryItem>> pantry,
     AsyncValue<List<InventoryItem>> lowStock,
   ) {
-    return Row(
-      children: [
-        Expanded(
-          child: _StatCard(
-            title: 'Items',
-            value: pantry.when(
-              data: (items) => items.length.toString(),
-              loading: () => '...',
-              error: (_, _) => '!',
-            ),
-            icon: Icons.inventory_2_outlined,
-            color: Theme.of(context).colorScheme.primaryContainer,
-            onColor: Theme.of(context).colorScheme.onPrimaryContainer,
-            onTap: () => context.push('/inventory'),
+    return _GlassContainer(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _StatItem(
+                label: 'Items',
+                value: pantry.when(
+                  data: (items) => items.length.toString(),
+                  loading: () => '...',
+                  error: (_, _) => '!',
+                ),
+              ),
+              _StatItem(
+                label: 'Categories',
+                value: '12', // Static for now
+              ),
+              _StatItem(
+                label: 'Value',
+                value: '\$450', // Static for now
+                isCurrency: true,
+              ),
+            ],
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _StatCard(
-            title: 'Low Stock',
-            value: lowStock.when(
-              data: (items) => items.length.toString(),
-              loading: () => '...',
-              error: (_, _) => '!',
+          const SizedBox(height: 24),
+          _buildPantryStatus(context, pantry),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPantryStatus(BuildContext context, AsyncValue<List<InventoryItem>> pantry) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '85% Stocked',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withValues(alpha: 0.8),
+              ),
             ),
-            icon: Icons.warning_amber_rounded,
-            color: Theme.of(context).colorScheme.errorContainer,
-            onColor: Theme.of(context).colorScheme.onErrorContainer,
-            onTap: () {},
+          ],
+        ),
+        const SizedBox(height: 10),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: LinearProgressIndicator(
+            value: 0.85,
+            minHeight: 8,
+            backgroundColor: Colors.white.withValues(alpha: 0.1),
+            valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
           ),
         ),
       ],
@@ -117,196 +175,276 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildSectionHeader(BuildContext context, String title) {
-    return Text(
-      title,
-      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w600,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.outfit(
             fontSize: 18,
+            fontWeight: FontWeight.w600,
           ),
+        ),
+        Icon(Icons.chevron_right, size: 20, color: Colors.white.withValues(alpha: 0.5)),
+      ],
+    );
+  }
+
+  Widget _buildLowStockCarousel(BuildContext context, AsyncValue<List<InventoryItem>> lowStock) {
+    return SizedBox(
+      height: 160,
+      child: lowStock.when(
+        data: (items) {
+          if (items.isEmpty) {
+            return const _GlassContainer(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Center(child: Text('All items are well-stocked!')),
+            );
+          }
+          return ListView.separated(
+            padding: EdgeInsets.zero,
+            scrollDirection: Axis.horizontal,
+            itemCount: items.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            itemBuilder: (context, index) {
+              final item = items[index];
+              final isCritical = item.currentQty <= item.reorderPoint * 0.5;
+              return _AlertCard(
+                name: item.product?.name ?? 'Unknown',
+                status: isCritical ? 'Critical, Gold' : 'Low, Emerald',
+                color: isCritical 
+                  ? const Color(0xFFF59E0B).withValues(alpha: 0.2)
+                  : const Color(0xFF10B981).withValues(alpha: 0.2),
+                icon: isCritical ? Icons.warning_amber_rounded : Icons.eco_outlined,
+                onReorder: () {},
+              );
+            },
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, _) => Center(child: Text('Error: $err')),
+      ),
     );
   }
 
   Widget _buildQuickActions(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _QuickActionButton(
+        _QuickAction(
+          icon: Icons.qr_code_scanner_rounded,
+          label: 'Scan Item',
+          onTap: () {},
+        ),
+        _QuickAction(
+          icon: Icons.add_rounded,
           label: 'Add Item',
-          icon: Icons.add_box_outlined,
           onTap: () => context.push('/inventory/add'),
         ),
-        _QuickActionButton(
-          label: 'Scan',
-          icon: Icons.qr_code_scanner,
-          onTap: () {},
-        ),
-        _QuickActionButton(
-          label: 'Shopping',
-          icon: Icons.shopping_cart_outlined,
-          onTap: () {},
-        ),
-        _QuickActionButton(
-          label: 'Settings',
-          icon: Icons.settings_outlined,
+        _QuickAction(
+          icon: Icons.list_alt_rounded,
+          label: 'Shopping List',
           onTap: () {},
         ),
       ],
     );
   }
-
-  Widget _buildLowStockList(BuildContext context, AsyncValue<List<InventoryItem>> lowStock) {
-    return lowStock.when(
-      data: (items) {
-        if (items.isEmpty) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Icon(Icons.check_circle_outline, color: Theme.of(context).colorScheme.primary),
-                  const SizedBox(width: 16),
-                  const Text('All items are well-stocked!'),
-                ],
-              ),
-            ),
-          );
-        }
-        return Column(
-          children: items
-              .take(3)
-              .map((item) => Card(
-                    margin: const EdgeInsets.only(bottom: 8),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).colorScheme.errorContainer,
-                        child: Icon(
-                          Icons.priority_high,
-                          color: Theme.of(context).colorScheme.error,
-                          size: 20,
-                        ),
-                      ),
-                      title: Text(item.product?.name ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.w500)),
-                      subtitle: Text('Only ${item.currentQty} left'),
-                      trailing: const Icon(Icons.chevron_right, size: 20, color: Colors.grey),
-                    ),
-                  ))
-              .toList(),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Text('Error loading alerts: $err'),
-    );
-  }
 }
 
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-  final Color onColor;
-  final VoidCallback onTap;
+class _GlassContainer extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final double borderRadius;
 
-  const _StatCard({
-    required this.title,
-    required this.value,
-    required this.icon,
-    required this.color,
-    required this.onColor,
-    required this.onTap,
+  const _GlassContainer({
+    required this.child,
+    this.padding,
+    this.borderRadius = 24.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: Colors.white, // Use white for clean look, with colored icon/text or border
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.grey.shade200),
-        borderRadius: BorderRadius.circular(8),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(borderRadius),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.1),
+              width: 1.5,
+            ),
+          ),
+          child: child,
+        ),
       ),
-      margin: EdgeInsets.zero,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Icon(icon, size: 24, color: onColor),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF1A1A1A),
-                    ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+    );
+  }
+}
+
+class _StatItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool isCurrency;
+
+  const _StatItem({
+    required this.label,
+    required this.value,
+    this.isCurrency = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          value,
+          style: GoogleFonts.outfit(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: isCurrency ? Colors.white : Colors.white.withValues(alpha: 0.9),
           ),
         ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.white.withValues(alpha: 0.5),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AlertCard extends StatelessWidget {
+  final String name;
+  final String status;
+  final Color color;
+  final IconData icon;
+  final VoidCallback onReorder;
+
+  const _AlertCard({
+    required this.name,
+    required this.status,
+    required this.color,
+    required this.icon,
+    required this.onReorder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.white.withValues(alpha: 0.8), size: 28),
+          const Spacer(),
+          Text(
+            name,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            status,
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.white.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: onReorder,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white.withValues(alpha: 0.15),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              minimumSize: const Size(double.infinity, 32),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              padding: EdgeInsets.zero,
+            ),
+            child: const Text('Reorder', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _QuickActionButton extends StatelessWidget {
-  final String label;
+class _GlassIcon extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
 
-  const _QuickActionButton({
-    required this.label,
+  const _GlassIcon({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return _GlassContainer(
+      borderRadius: 12,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(icon, size: 24, color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _QuickAction({
     required this.icon,
+    required this.label,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade200),
-              ),
-              child: Icon(icon, size: 24, color: Theme.of(context).primaryColor),
+    return Column(
+      children: [
+        _GlassContainer(
+          borderRadius: 100,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(100),
+            child: Container(
+              width: 72,
+              height: 72,
+              alignment: Alignment.center,
+              child: Icon(icon, color: Colors.white, size: 30),
             ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-                color: const Color(0xFF1A1A1A),
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+        const SizedBox(height: 12),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
+        ),
+      ],
     );
   }
 }
