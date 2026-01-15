@@ -1,11 +1,29 @@
 services:
   backend:
+    build:
+      target: build
+    volumes:
+      - ./backend:/app
+      - /app/build
+    command: ./gradlew bootRun -Pargs=--spring.profiles.active=dev
     ports:
-      - "8080:8080"
+      - "8081:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/refillio
+      - SPRING_DATASOURCE_USERNAME=refillio
+      - SPRING_DATASOURCE_PASSWORD=refillio_password
 
   mobile:
+    build:
+      target: build
+    volumes:
+      - ./mobile:/app
+      - /app/build
+    command: flutter run -d web-server --web-hostname 0.0.0.0 --web-port 80
     ports:
       - "3000:80"
+    environment:
+      - SERVICE_NAME_BACKEND=backend
 
   db:
     ports:

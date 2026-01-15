@@ -9,9 +9,9 @@ version = "0.0.1-SNAPSHOT"
 description = "Demo project for Spring Boot"
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+//	toolchain {
+//		languageVersion = JavaLanguageVersion.of(21)
+//	}
 }
 
 configurations {
@@ -57,6 +57,9 @@ dependencies {
 
 	// Scraper
 	implementation("org.jsoup:jsoup:1.18.1")
+
+	// DevTools
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 tasks.withType<Test> {
