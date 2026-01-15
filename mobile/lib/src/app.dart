@@ -13,7 +13,7 @@ class RefillioApp extends ConsumerWidget {
       title: 'Refillio',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       routerConfig: appRouter,
       builder: (context, child) {
         return ShadTheme(

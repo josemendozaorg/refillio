@@ -22,18 +22,19 @@ class DashboardScreen extends ConsumerWidget {
         children: [
           // Background Glows
           Positioned(
-            top: -100,
-            left: -100,
+            top: -150,
+            left: -150,
             child: Container(
-              width: 300,
-              height: 300,
+              width: 400,
+              height: 400,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-                child: Container(color: Colors.transparent),
+                gradient: RadialGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.0),
+                  ],
+                ),
               ),
             ),
           ),
@@ -267,7 +268,7 @@ class _GlassContainer extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
           padding: padding,
           decoration: BoxDecoration(

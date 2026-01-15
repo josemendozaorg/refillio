@@ -95,7 +95,7 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: TextField(
             controller: _searchController,
             onChanged: (val) => setState(() => _searchQuery = val),
@@ -160,21 +160,23 @@ class _AddItemScreenState extends ConsumerState<AddItemScreen> {
           backgroundColor: Color(0xFF1A1D23),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           title: Text('Add ${product.name}', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _DialogInput(
-                controller: qtyController,
-                label: 'Current Quantity',
-                unit: product.unitSymbol ?? '',
-              ),
-              const SizedBox(height: 16),
-              _DialogInput(
-                controller: parController,
-                label: 'Reorder Point',
-                unit: product.unitSymbol ?? '',
-              ),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _DialogInput(
+                  controller: qtyController,
+                  label: 'Current Quantity',
+                  unit: product.baseUnit?.symbol ?? '',
+                ),
+                const SizedBox(height: 16),
+                _DialogInput(
+                  controller: parController,
+                  label: 'Reorder Point',
+                  unit: product.baseUnit?.symbol ?? '',
+                ),
+              ],
+            ),
           ),
           actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           actions: [
