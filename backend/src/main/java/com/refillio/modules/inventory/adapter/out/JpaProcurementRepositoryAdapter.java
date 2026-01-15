@@ -61,7 +61,9 @@ public class JpaProcurementRepositoryAdapter implements ProcurementRepository {
 
     private JpaProcurementOrder toEntity(ProcurementOrder domain) {
         JpaProcurementOrder entity = new JpaProcurementOrder();
-        entity.setId(domain.getId());
+        if (domain.getId() != null) {
+            entity.setId(domain.getId());
+        }
         entity.setUserId(domain.getUserId());
         entity.setStatus(domain.getStatus());
         entity.setTotalAmount(domain.getTotalAmount());
@@ -85,7 +87,9 @@ public class JpaProcurementRepositoryAdapter implements ProcurementRepository {
 
     private JpaProcurementOrderItem toEntity(ProcurementOrderItem domain) {
         JpaProcurementOrderItem entity = new JpaProcurementOrderItem();
-        entity.setId(domain.getId());
+        if (domain.getId() != null) {
+            entity.setId(domain.getId());
+        }
         entity.setOrderId(domain.getOrderId());
         entity.setListingId(domain.getListingId());
         entity.setCanonicalProductId(domain.getCanonicalProductId());

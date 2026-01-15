@@ -17,7 +17,7 @@ public class ProcurementService {
         ProcurementOrder order = procurementRepository.findDraftOrderByUserId(userId)
             .orElseGet(() -> {
                 ProcurementOrder newOrder = new ProcurementOrder(
-                    UUID.randomUUID(),
+                    null,
                     userId,
                     "draft",
                     BigDecimal.ZERO,
@@ -38,7 +38,7 @@ public class ProcurementService {
         } else {
             // Create new item
             ProcurementOrderItem newItem = new ProcurementOrderItem(
-                UUID.randomUUID(),
+                null,
                 order.getId(),
                 null, // listingId
                 canonicalProductId,
