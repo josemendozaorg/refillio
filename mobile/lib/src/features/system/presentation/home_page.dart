@@ -55,24 +55,34 @@ class DashboardScreen extends ConsumerWidget {
   }
 
   Widget _buildWelcomeHeader(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Hello!',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF1A1A1A),
-              ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Manage your pantry effortlessly.',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey.shade600,
-              ),
-        ),
-      ],
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: colorScheme.primary,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'REFILLIO',
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5,
+                  color: colorScheme.onPrimary,
+                ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Manage your pantry effortlessly.',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onPrimary.withValues(alpha: 0.8),
+                ),
+          ),
+        ],
+      ),
     );
   }
 
