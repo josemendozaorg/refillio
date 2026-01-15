@@ -1,0 +1,83 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+
+    # Disable caching for index.html, service worker, and bootstrap scripts
+    location ~* ^/(index\.html|flutter_service_worker\.js|flutter_bootstrap\.js|main\.dart\.js|flutter\.js|manifest\.json)$ {
+        add_header Cache-Control "no-store, no-cache, must-revalidate";
+        expires 0;
+    }
+
+    # Cache static assets aggressively
+    location ~* \.(css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Support for Single Page Application (SPA) routing
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Proxy API requests to the backend service
+    location /api {
+        set $cors_origin $http_origin;
+        if ($cors_origin = "") {
+            set $cors_origin "*";
+        }
+
+        # Handle Preflight
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' "$cors_origin" always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
+            add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization' always;
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+
+        # Proxy to backend using dynamic hostname
+        proxy_pass http://${SERVICE_NAME_BACKEND}:8080;
+        proxy_http_version 1.1;
+        
+        # Spoof Same-Origin to bypass backend CORS
+        proxy_set_header Host "${SERVICE_NAME_BACKEND}:8080";
+        proxy_set_header Origin "http://${SERVICE_NAME_BACKEND}:8080";
+        proxy_set_header Referer "http://${SERVICE_NAME_BACKEND}:8080/";
+        
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        
+        # Add CORS headers to response (always)
+        add_header 'Access-Control-Allow-Origin' "$cors_origin" always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, DELETE' always;
+        add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization' always;
+
+        # Proxy timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    client_max_body_size 10M;
+}

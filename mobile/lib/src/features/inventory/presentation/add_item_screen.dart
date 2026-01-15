@@ -21,14 +21,17 @@ class AddItemScreen extends ConsumerWidget {
       ),
       body: productsAsync.when(
         data: (products) {
-          return ListView.builder(
+          return ListView.separated(
             itemCount: products.length,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            separatorBuilder: (context, index) => const Divider(height: 1),
             itemBuilder: (context, index) {
               final product = products[index];
               return ListTile(
-                title: Text(product.name),
+                title: Text(product.name, style: const TextStyle(fontWeight: FontWeight.w500)),
                 subtitle: Text(product.description ?? ''),
-                trailing: const Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.add_circle, color: Colors.grey),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 onTap: () => _showAddDialog(context, ref, product),
               );
             },
@@ -50,12 +53,16 @@ class AddItemScreen extends ConsumerWidget {
         title: Text('Add ${product.name}'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const SizedBox(height: 8),
             TextField(
               controller: qtyController,
-              decoration: const InputDecoration(labelText: 'Quantity'),
+              decoration: const InputDecoration(labelText: 'Current Quantity'),
               keyboardType: TextInputType.number,
+              autofocus: true,
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: parController,
               decoration: const InputDecoration(labelText: 'Reorder Point (Par Level)'),
@@ -92,7 +99,7 @@ class AddItemScreen extends ConsumerWidget {
                 // Show error
               }
             },
-            child: const Text('Add'),
+            child: const Text('Add Item'),
           ),
         ],
       ),
