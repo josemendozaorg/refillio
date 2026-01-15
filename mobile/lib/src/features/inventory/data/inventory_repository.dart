@@ -30,6 +30,16 @@ class InventoryRepository {
     );
     return InventoryItem.fromJson(response.data);
   }
+
+  Future<void> logConsumption(String inventoryItemId, double amount, String eventType) async {
+    await _dio.post(
+      'inventory/$inventoryItemId/consumption',
+      data: {
+        'amount': amount,
+        'eventType': eventType,
+      },
+    );
+  }
 }
 
 @riverpod

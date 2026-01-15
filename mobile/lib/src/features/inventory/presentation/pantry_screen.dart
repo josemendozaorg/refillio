@@ -36,18 +36,48 @@ class PantryScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final item = items[index];
               return Card(
-                child: ListTile(
-                  title: Text(item.product?.name ?? 'Unknown Product', style: const TextStyle(fontWeight: FontWeight.w600)),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Text('${item.currentQty} ${item.product?.unitSymbol ?? ''} • Par: ${item.reorderPoint}'),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add_circle_outline),
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      // Logic to increment (out of scope for MVP step 1 but could be added)
-                    },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListTile(
+                    title: Text(item.product?.name ?? 'Unknown Product',
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                          '${item.currentQty} ${item.product?.unitSymbol ?? ''} • Par: ${item.reorderPoint}'),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove_circle_outline),
+                          tooltip: 'Consumed 1',
+                          onPressed: () async {
+                            await ref
+                                .read(inventoryRepositoryProvider)
+                                .logConsumption(item.id, 1.0, 'opened');
+                            // Refresh list
+                            ref.invalidate(pantryItemsProvider(demoUserId));
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline, color: Colors.red),
+                          tooltip: 'I am out!',
+                          onPressed: () async {
+                            // Confirm dialog? For speed, direct action first or simple snackbar undo (not implemented yet)
+                             await ref
+                                .read(inventoryRepositoryProvider)
+                                .logConsumption(item.id, 0, 'exhausted');
+                             ref.invalidate(pantryItemsProvider(demoUserId));
+                             if (context.mounted) {
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 const SnackBar(content: Text('Marked as exhausted. Added to shopping list.')),
+                               );
+                             }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

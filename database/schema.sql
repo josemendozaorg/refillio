@@ -148,7 +148,8 @@ CREATE TABLE procurement_orders (
 CREATE TABLE procurement_order_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     order_id UUID REFERENCES procurement_orders(id) ON DELETE CASCADE,
-    listing_id UUID REFERENCES provider_listings(id), -- The specific deal we found
+    listing_id UUID REFERENCES provider_listings(id), -- The specific deal we found (Optional in Phase 1)
+    canonical_product_id UUID REFERENCES canonical_products(id), -- Fallback for generic reorders
     quantity INTEGER NOT NULL DEFAULT 1,
     
     price_at_purchase DECIMAL(10, 2),
