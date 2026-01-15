@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,7 +80,7 @@ class _PantryScreenState extends ConsumerState<PantryScreen> {
         label: const Text('Add Item'),
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
-      ).animate().scale(delay: 500.ms, curve: Curves.backOut),
+      ).animate().scale(delay: 500.ms, curve: Curves.easeOutBack),
     );
   }
 
@@ -206,12 +205,12 @@ class _PantryItemCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: (isLow ? Colors.orange : Colors.emerald).withValues(alpha: 0.1),
+                    color: (isLow ? Colors.orange : const Color(0xFF10B981)).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     isLow ? Icons.warning_amber_rounded : Icons.inventory_2_outlined,
-                    color: isLow ? Colors.orange : Colors.emerald,
+                    color: isLow ? Colors.orange : const Color(0xFF10B981),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -252,7 +251,7 @@ class _PantryItemCard extends StatelessWidget {
                 minHeight: 4,
                 backgroundColor: Colors.white.withValues(alpha: 0.05),
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  isLow ? Colors.orange : Colors.emerald,
+                  isLow ? Colors.orange : const Color(0xFF10B981),
                 ),
               ),
             ),
