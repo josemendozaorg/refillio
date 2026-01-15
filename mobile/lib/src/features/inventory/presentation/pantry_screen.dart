@@ -53,27 +53,55 @@ class PantryScreen extends ConsumerWidget {
                           icon: const Icon(Icons.remove_circle_outline),
                           tooltip: 'Consumed 1',
                           onPressed: () async {
-                            await ref
-                                .read(inventoryRepositoryProvider)
-                                .logConsumption(item.id, 1.0, 'opened');
-                            // Refresh list
-                            ref.invalidate(pantryItemsProvider(demoUserId));
+                            try {
+                              await ref
+                                  .read(inventoryRepositoryProvider)
+                                  .logConsumption(item.id, 1.0, 'opened');
+                              // Refresh list
+                              ref.invalidate(pantryItemsProvider(demoUserId));
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Consumed 1 unit.'),
+                                      duration: Duration(seconds: 1)),
+                                );
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Error: $e'),
+                                      backgroundColor: Colors.red),
+                                );
+                              }
+                            }
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_outline, color: Colors.red),
                           tooltip: 'I am out!',
                           onPressed: () async {
-                            // Confirm dialog? For speed, direct action first or simple snackbar undo (not implemented yet)
-                             await ref
-                                .read(inventoryRepositoryProvider)
-                                .logConsumption(item.id, 0, 'exhausted');
-                             ref.invalidate(pantryItemsProvider(demoUserId));
-                             if (context.mounted) {
-                               ScaffoldMessenger.of(context).showSnackBar(
-                                 const SnackBar(content: Text('Marked as exhausted. Added to shopping list.')),
-                               );
-                             }
+                            try {
+                              await ref
+                                  .read(inventoryRepositoryProvider)
+                                  .logConsumption(item.id, 0, 'exhausted');
+                              ref.invalidate(pantryItemsProvider(demoUserId));
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Marked as exhausted. Added to shopping list.')),
+                                );
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Error: $e'),
+                                      backgroundColor: Colors.red),
+                                );
+                              }
+                            }
                           },
                         ),
                       ],
