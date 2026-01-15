@@ -5,9 +5,13 @@ part 'http_client_provider.g.dart';
 
 @riverpod
 Dio dio(Ref ref) {
-  // For local development, pointing directly to the backend.
+  const apiUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://localhost:8081/api/v1/',
+  );
+  
   return Dio(BaseOptions(
-    baseUrl: 'http://localhost:8081/api/v1/', 
+    baseUrl: apiUrl,
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
   ));
