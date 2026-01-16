@@ -1,6 +1,6 @@
 plugins {
 	java
-	id("org.springframework.boot") version "4.0.1"
+	id("org.springframework.boot") version "3.3.6"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -27,13 +27,18 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-flyway")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	
+	// Flyway
+	implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
+	
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
+	
+	runtimeOnly("org.postgresql:postgresql")
+	
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-test-autoconfigure")
 	testImplementation("org.springframework.boot:spring-boot-starter-actuator-test")
@@ -47,9 +52,8 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
 	// Spring Modulith
-	implementation(platform("org.springframework.modulith:spring-modulith-bom:2.0.1"))
+	implementation(platform("org.springframework.modulith:spring-modulith-bom:1.2.4"))
 	implementation("org.springframework.modulith:spring-modulith-starter-core")
-	// implementation("org.springframework.modulith:spring-modulith-starter-jpa")
 	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
 
 	// OpenAPI
@@ -57,6 +61,9 @@ dependencies {
 
 	// Scraper
 	implementation("org.jsoup:jsoup:1.18.1")
+	
+	// DevTools
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 tasks.withType<Test> {

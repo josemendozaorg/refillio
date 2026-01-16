@@ -7,5 +7,7 @@ import java.util.UUID;
 public interface InventoryRepository {
     List<InventoryItem> findAllByUserId(UUID userId);
     Optional<InventoryItem> findByUserIdAndProductId(UUID userId, UUID productId);
+    Optional<InventoryItem> findById(UUID id);
     InventoryItem save(InventoryItem item);
+    void delete(InventoryItem item);
 }

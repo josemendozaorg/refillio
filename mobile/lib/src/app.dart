@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'router/app_router.dart';
 import 'shared/theme.dart';
 
@@ -12,8 +13,17 @@ class RefillioApp extends ConsumerWidget {
       title: 'Refillio',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       routerConfig: appRouter,
+      builder: (context, child) {
+        return ShadTheme(
+          data: ShadThemeData(
+            brightness: Theme.of(context).brightness,
+            colorScheme: ShadColorScheme.fromName('zinc'),
+          ),
+          child: ShadToaster(child: child!),
+        );
+      },
     );
   }
 }

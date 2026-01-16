@@ -3,6 +3,7 @@ package com.refillio.modules.inventory.adapter.in;
 import com.refillio.modules.catalog.domain.CanonicalProduct;
 import com.refillio.modules.catalog.domain.CatalogService;
 import com.refillio.modules.inventory.adapter.in.dto.AddToPantryRequest;
+import com.refillio.modules.inventory.adapter.in.dto.ConsumptionRequest;
 import com.refillio.modules.inventory.adapter.in.dto.InventoryItemResponse;
 import com.refillio.modules.inventory.domain.InventoryItem;
 import com.refillio.modules.inventory.domain.InventoryService;
@@ -44,6 +45,17 @@ public class InventoryController {
                 request.reorderPoint()
         );
         return toDto(item);
+    }
+
+    @PostMapping("/{id}/consumption")
+    public ResponseEntity<Void> logConsumption(@PathVariable UUID id, @RequestBody ConsumptionRequest request) {
+        inventoryService.logConsumption(id, request.amount(), request.eventType());
+        return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(com.refillio.modules.inventory.domain.InsufficientInventoryException.class)
+    public ResponseEntity<String> handleInsufficientInventory(com.refillio.modules.inventory.domain.InsufficientInventoryException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
     
     private InventoryItemResponse toDto(InventoryItem item) {

@@ -30,8 +30,19 @@ public class JpaInventoryRepositoryAdapter implements InventoryRepository {
     }
 
     @Override
+    public Optional<InventoryItem> findById(UUID id) {
+        return repository.findById(id)
+                .map(this::toDomain);
+    }
+
+    @Override
     public InventoryItem save(InventoryItem item) {
         return toDomain(repository.save(toEntity(item)));
+    }
+
+    @Override
+    public void delete(InventoryItem item) {
+        repository.delete(toEntity(item));
     }
     
     private InventoryItem toDomain(JpaInventoryItem entity) {

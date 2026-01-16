@@ -20,7 +20,7 @@ services:
       # Explicitly set SPRING_DATASOURCE_URL using the SERVICE_NAME_DB variable.
       # This overrides any incorrect auto-injected value from Coolify.
       # We rely on Coolify providing SERVICE_NAME_DB in the deployment environment.
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME_DB}:5432/refillio
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${SERVICE_NAME_DB:-db}:5432/refillio
       - SPRING_DATASOURCE_USERNAME=refillio
       - SPRING_DATASOURCE_PASSWORD=refillio_password
       - SPRING_FLYWAY_ENABLED=true
@@ -36,6 +36,8 @@ services:
       args:
         COMMIT_HASH: ${COMMIT_HASH:-dev}
         BUILD_VERSION: ${BUILD_VERSION:-1.0.0}
+    environment:
+      - SERVICE_NAME_BACKEND=${SERVICE_NAME_BACKEND:-backend}
     expose:
       - "80"
     depends_on:
