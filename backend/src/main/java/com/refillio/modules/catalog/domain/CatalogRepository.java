@@ -8,7 +8,9 @@ public interface CatalogRepository {
     List<CanonicalProduct> findAllProducts();
     Optional<CanonicalProduct> findProductById(UUID id);
     CanonicalProduct saveProduct(CanonicalProduct product);
-    
+    void deleteProductById(UUID id);
+    CanonicalProduct updateProduct(CanonicalProduct product);
+
     // Auxiliary
     List<Category> findAllCategories();
     List<MeasurementUnit> findAllMeasurementUnits();

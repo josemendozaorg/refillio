@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
-import '../features/inventory/presentation/pantry_screen.dart';
-import '../features/inventory/presentation/add_item_screen.dart';
-import '../features/system/presentation/home_page.dart';
+import '../features/catalog/presentation/product_list_screen.dart';
+import '../features/catalog/presentation/add_edit_product_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -17,6 +16,23 @@ final appRouter = GoRouter(
         GoRoute(
           path: 'inventory/add',
           builder: (context, state) => const AddItemScreen(),
+        ),
+        GoRoute(
+          path: 'products',
+          builder: (context, state) => const ProductListScreen(),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => const AddEditProductScreen(),
+            ),
+            GoRoute(
+              path: ':id',
+              builder: (context, state) {
+                final id = state.params['id'];
+                return AddEditProductScreen(productId: id);
+              },
+            ),
+          ],
         ),
       ],
     ),

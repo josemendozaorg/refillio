@@ -1,4 +1,17 @@
--- Refillio Database Schema
+
+
+-- Add products table
+CREATE TABLE products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(200) NOT NULL,
+    description TEXT,
+    category_id INTEGER REFERENCES categories(id),
+    base_unit_id INTEGER REFERENCES measurement_units(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Add unique constraint on name
+ALTER TABLE products ADD CONSTRAINT uq_product_name UNIQUE (name);
 -- Dialect: PostgreSQL
 
 -- ==========================================
